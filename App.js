@@ -3,6 +3,9 @@ import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import ListItem from './components/ListItem';
 import dummyArticles from './dummies/articles';
 import Constans from 'expo-constants';
+import axios from 'axios';
+
+const URL = `https://newsapi.org/v2/top-headlines?country=jp&apiKey=${Constans.manifest.extra.newsApiKey}`;
 
 const styles = StyleSheet.create({
   container: {
@@ -14,12 +17,17 @@ const styles = StyleSheet.create({
 export default function App() {
   const [articles, setArticles] = useState([]);
   useEffect(() => {
-    alert(Constans.manifest.extra.newsApiKey);
-    const timer = setTimeout(() => {
-      setArticles(dummyArticles);
-    }, 2000);
-    return () => clearTimeout(timer);
+    fetchArticles();
   }, []);
+
+  const fetchArticles = async () => {
+    try {
+      const response = await axios.get(URL);
+      setArticles(response.data.articles);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>

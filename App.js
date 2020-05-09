@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import ListItem from './components/ListItem';
-import articles from './dummies/articles';
+import dummyArticles from './dummies/articles';
+import Constans from 'expo-constants';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +12,15 @@ const styles = StyleSheet.create({
 });
 
 export default function App() {
+  const [articles, setArticles] = useState([]);
+  useEffect(() => {
+    alert(Constans.manifest.extra.newsApiKey);
+    const timer = setTimeout(() => {
+      setArticles(dummyArticles);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
